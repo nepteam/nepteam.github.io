@@ -1,0 +1,331 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Web Service &mdash; Eryri 0.1 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:'../',
+        VERSION:'0.1',
+        COLLAPSE_INDEX:false,
+        FILE_SUFFIX:'.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+    <link rel="top" title="Eryri 0.1 documentation" href="../index.html"/>
+        <link rel="up" title="Architecture" href="index.html"/>
+        <link rel="prev" title="Security Design" href="security.html"/> 
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../index.html" class="icon icon-home"> Eryri</a>
+        <form class="wy-form" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search docs" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix">
+        
+        
+            <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Architecture</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="messaging-service.html">Messaging Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html">Security Design</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Web Service</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top">
+        <i data-toggle="wy-nav-top" class="icon icon-reorder"></i>
+        <a href="/">Eryri</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <ul class="wy-breadcrumbs">
+  <li><a href="../index.html">Docs</a> &raquo;</li>
+  <li><a href="">Web Service</a></li>
+  
+</ul>
+<hr/>
+
+          
+  <div class="section" id="web-service">
+<h1><a class="toc-backref" href="#id4">Web Service</a><a class="headerlink" href="#web-service" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#web-service" id="id4">Web Service</a><ul>
+<li><a class="reference internal" href="#how-it-normally-works" id="id5">How it normally works</a></li>
+<li><a class="reference internal" href="#security" id="id6">Security</a><ul>
+<li><a class="reference internal" href="#post-authentication" id="id7">POST /authentication</a><ul>
+<li><a class="reference internal" href="#request" id="id8">Request</a><ul>
+<li><a class="reference internal" href="#format" id="id9">Format</a></li>
+<li><a class="reference internal" href="#example" id="id10">Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#response" id="id11">Response</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#get-users" id="id12">GET /users</a><ul>
+<li><a class="reference internal" href="#parameters-via-query-string" id="id13">Parameters via Query String</a></li>
+<li><a class="reference internal" href="#id1" id="id14">Response</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#get-users-id-or-email-address" id="id15">GET /users/ID_OR_EMAIL_ADDRESS</a><ul>
+<li><a class="reference internal" href="#id2" id="id16">Response</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#put-users-id-or-email-address" id="id17">PUT /users/ID_OR_EMAIL_ADDRESS</a></li>
+<li><a class="reference internal" href="#delete-users-id-or-email-address" id="id18">DELETE /users/ID_OR_EMAIL_ADDRESS</a><ul>
+<li><a class="reference internal" href="#id3" id="id19">Response</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="how-it-normally-works">
+<h2><a class="toc-backref" href="#id5">How it normally works</a><a class="headerlink" href="#how-it-normally-works" title="Permalink to this headline">¶</a></h2>
+<p>The API will be implemented as JSON RPC.</p>
+<p>Please note that all requests to the API will require an <strong>application access
+token set</strong> which only the web interface (only via a user with the <strong>master
+permit</strong>) or the command line interface can manage the token.</p>
+<p>The API will always expect all incoming requests to have a header <strong>X-WSAPI-TOKEN</strong>
+with an <strong>application access token set</strong>.</p>
+<p>If the application access token set is not present or invalid, the service will
+return an empty HTTP-403 response.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In the early stage of development, the usage of application access token sets
+will not be enforced.</p>
+</div>
+</div>
+<div class="section" id="security">
+<h2><a class="toc-backref" href="#id6">Security</a><a class="headerlink" href="#security" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="post-authentication">
+<h3><a class="toc-backref" href="#id7">POST /authentication</a><a class="headerlink" href="#post-authentication" title="Permalink to this headline">¶</a></h3>
+<p>Perform the user authentication</p>
+<div class="section" id="request">
+<h4><a class="toc-backref" href="#id8">Request</a><a class="headerlink" href="#request" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="format">
+<h5><a class="toc-backref" href="#id9">Format</a><a class="headerlink" href="#format" title="Permalink to this headline">¶</a></h5>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s2">&quot;key&quot;</span><span class="o">:</span> <span class="nx">E_MAIL_AS_KEY</span><span class="p">,</span>
+    <span class="s2">&quot;password&quot;</span><span class="o">:</span> <span class="nx">PASSWORD</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example">
+<h5><a class="toc-backref" href="#id10">Example</a><a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h5>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s2">&quot;key&quot;</span><span class="o">:</span> <span class="s2">&quot;ramen@food.org&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;password&quot;</span><span class="o">:</span> <span class="s2">&quot;magic-word&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="response">
+<h4><a class="toc-backref" href="#id11">Response</a><a class="headerlink" href="#response" title="Permalink to this headline">¶</a></h4>
+<p>This API returns an <strong>empty HTTP-200</strong> response if succeeded.</p>
+<p>This API returns an <strong>empty HTTP-400</strong> response if the parameter <tt class="docutils literal"><span class="pre">key</span></tt> (as e-mail address) is invalid or any fields are empty or empty string.</p>
+<p>This API returns an <strong>empty HTTP-401</strong> response if the authentication fails.</p>
+<p>This API returns an <strong>empty HTTP-403</strong> response if the token is invalid.</p>
+</div>
+</div>
+<div class="section" id="get-users">
+<h3><a class="toc-backref" href="#id12">GET /users</a><a class="headerlink" href="#get-users" title="Permalink to this headline">¶</a></h3>
+<p>Retrieve the list of users or run the case-insensitive search for users by alias, full name or e-mail address.</p>
+<div class="section" id="parameters-via-query-string">
+<h4><a class="toc-backref" href="#id13">Parameters via Query String</a><a class="headerlink" href="#parameters-via-query-string" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="6%" />
+<col width="8%" />
+<col width="10%" />
+<col width="8%" />
+<col width="67%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Key</th>
+<th class="head">Type</th>
+<th class="head">Required</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>page</td>
+<td>int, &gt;0</td>
+<td>No</td>
+<td>1</td>
+<td>The page number</td>
+</tr>
+<tr class="row-odd"><td>size</td>
+<td>int, &gt;0</td>
+<td>No</td>
+<td>8</td>
+<td>The number of results per page</td>
+</tr>
+<tr class="row-even"><td>query</td>
+<td>str</td>
+<td>No</td>
+<td>-</td>
+<td>The search query for alias, full name or e-mail address.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id1">
+<h4><a class="toc-backref" href="#id14">Response</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<p>The result will always be in a JSON-formatted HTTP-200 response like the following.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s2">&quot;query&quot;</span><span class="o">:</span> <span class="nx">STR_GIVEN_QUERY_OR_NULL</span><span class="p">,</span>
+    <span class="s2">&quot;page&quot;</span><span class="o">:</span> <span class="nx">INT_PAGE_NUMBER</span><span class="p">,</span>
+    <span class="s2">&quot;size&quot;</span><span class="o">:</span> <span class="nx">NUMBER_OF_RESULT_PER_PAGE</span><span class="p">,</span>
+    <span class="s2">&quot;list&quot;</span><span class="o">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="nx">USER_1_ID</span><span class="p">,</span>
+            <span class="s2">&quot;url&quot;</span><span class="o">:</span> <span class="nx">URL_TO_USER_1</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="nx">USER_2_ID</span><span class="p">,</span>
+            <span class="s2">&quot;url&quot;</span><span class="o">:</span> <span class="nx">URL_TO_USER_2</span>
+        <span class="p">},</span>
+        <span class="c1">//...</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="nx">USER_N_ID</span><span class="p">,</span>
+            <span class="s2">&quot;url&quot;</span><span class="o">:</span> <span class="nx">URL_TO_USER_N</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The search result will order by e-mail address, alias and full name.</p>
+</div>
+</div>
+</div>
+<div class="section" id="get-users-id-or-email-address">
+<h3><a class="toc-backref" href="#id15">GET /users/ID_OR_EMAIL_ADDRESS</a><a class="headerlink" href="#get-users-id-or-email-address" title="Permalink to this headline">¶</a></h3>
+<p>Retrieve the user information (without security-sensitive information) by an
+identifier or an e-mail address.</p>
+<p>The parameter <tt class="docutils literal"><span class="pre">ID_OR_EMAIL_ADDRESS</span></tt> can be either an e-mail address (by pattern)
+or a user (unique) identifier.</p>
+<div class="section" id="id2">
+<h4><a class="toc-backref" href="#id16">Response</a><a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<p>The result will always be in a JSON-formatted HTTP-200 response like the following.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s2">&quot;_method&quot;</span><span class="o">:</span> <span class="p">(</span><span class="s2">&quot;identifier&quot;</span><span class="p">,</span> <span class="s2">&quot;email&quot;</span><span class="p">)</span>
+    <span class="c1">// non-security-sensitive user properties</span>
+    <span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="nx">USER_IDENTIFIER</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="put-users-id-or-email-address">
+<h3><a class="toc-backref" href="#id17">PUT /users/ID_OR_EMAIL_ADDRESS</a><a class="headerlink" href="#put-users-id-or-email-address" title="Permalink to this headline">¶</a></h3>
+<p>TBD</p>
+</div>
+<div class="section" id="delete-users-id-or-email-address">
+<h3><a class="toc-backref" href="#id18">DELETE /users/ID_OR_EMAIL_ADDRESS</a><a class="headerlink" href="#delete-users-id-or-email-address" title="Permalink to this headline">¶</a></h3>
+<p>Delete the user by an identifier or an e-mail address.</p>
+<p>The parameter <tt class="docutils literal"><span class="pre">ID_OR_EMAIL_ADDRESS</span></tt> can be either an e-mail address (by pattern)
+or a user (unique) identifier.</p>
+<div class="section" id="id3">
+<h4><a class="toc-backref" href="#id19">Response</a><a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<p>The result will always be in an empty HTTP-200 response if the user exists.</p>
+<p>The result will always be in an empty HTTP-410 response if the user does not exists.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          <footer>
+  
+    <div class="rst-footer-buttons">
+      
+      
+        <a href="security.html" class="btn btn-neutral" title="Security Design"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <p>
+      &copy; Copyright 2014, Juti Noppornpitak, Panote Siriaraya.
+  </p>
+
+  <a href="https://www.github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="http://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+</body>
+</html>
