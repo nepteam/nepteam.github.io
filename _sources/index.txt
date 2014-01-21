@@ -20,6 +20,11 @@ Eryri is an open-source development platform for collaborative educational softw
 
    architecture/index
 
+License
+=======
+
+MIT License on both code and documentation.
+
 .. Indices and tables
    ==================
 
