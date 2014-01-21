@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 NEP Team
-========
+########
 
 - Juti Noppornpitak (@shiroyuki)
 - Panote Siriaraya (@spanote)

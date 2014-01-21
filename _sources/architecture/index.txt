@@ -11,12 +11,6 @@ High-level Service Classification
         Application -> MessagingService
         AdminWebInterface -> WebService
         AdminWebInterface -> MessagingService
-        MessagingService -> WebService
-        MessagingService -> AMQP
-        MessagingService -> Cache
-        WebService -> AMQP
-        WebService -> DataStore
-        WebService -> Cache
     }
 
 Notes:
